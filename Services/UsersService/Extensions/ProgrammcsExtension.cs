@@ -1,5 +1,6 @@
 using System.Text.Json;
 using BackEnd.Models;
+using BackEnd.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,7 @@ public static class ProgrammcsExtension
             });
         });
 
+        services.AddScoped<IHashService, HashService>();
         return services;
     }
 
