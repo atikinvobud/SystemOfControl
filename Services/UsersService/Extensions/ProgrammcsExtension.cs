@@ -1,6 +1,8 @@
 using System.Text.Json;
+using BackEnd.DTOs;
 using BackEnd.Models;
 using BackEnd.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +12,7 @@ namespace BackEnd.Extensions;
 
 public static class ProgrammcsExtension
 {
-    public static IServiceCollection AddServices(this IServiceCollection services)
+    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         // настройка контроллеров
         services.AddControllersWithViews()
@@ -37,6 +39,9 @@ public static class ProgrammcsExtension
         });
 
         services.AddScoped<IHashService, HashService>();
+        services.AddScoped<AbstractValidator<RegistrDTO>, UserValidator>();
+
+        services.Configure<JwtSettings>( configuration.GetSection("JwtSettings"));
         return services;
     }
 
