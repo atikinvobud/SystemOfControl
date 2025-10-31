@@ -5,7 +5,8 @@ namespace BackEnd.Share;
 public static class ErorrService
 {
     public static string GetMessage(ErrorCode? code) => code switch
-    {    
+    {   
+        ErrorCode.CoockieError => "Не удалось сохранить токен в куки", 
         ErrorCode.WrongPassword => "Введен неправильный пароль",
         ErrorCode.RepeatLogin => "Вdеден не уникальный логин",
         ErrorCode.UserCreationError => "Произошла ошибка при создании пользователя",

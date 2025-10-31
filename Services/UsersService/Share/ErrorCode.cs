@@ -2,6 +2,7 @@ namespace BackEnd.Share;
 
 public enum ErrorCode
 {
+    CoockieError,
     WrongPassword,
     EmptyLogin,
     RepeatLogin,
