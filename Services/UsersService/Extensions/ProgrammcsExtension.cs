@@ -1,6 +1,7 @@
 using System.Text.Json;
 using BackEnd.DTOs;
 using BackEnd.Models;
+using BackEnd.Repositories;
 using BackEnd.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
@@ -38,9 +39,17 @@ public static class ProgrammcsExtension
             });
         });
 
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<ICoockieService, CoockieService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         services.AddScoped<IHashService, HashService>();
         services.AddScoped<AbstractValidator<RegistrDTO>, UserValidator>();
-
+        services.AddScoped<IJwtService, JwtService>();
+        services.AddHttpContextAccessor();
+        
         services.Configure<JwtSettings>( configuration.GetSection("JwtSettings"));
         return services;
     }
