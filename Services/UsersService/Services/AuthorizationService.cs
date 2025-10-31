@@ -1,4 +1,5 @@
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using BackEnd.DTOs;
 using BackEnd.Extensions;
 using BackEnd.Models;
@@ -10,15 +11,15 @@ using FluentValidation;
 
 namespace BackEnd.Services;
 
-public class AuthorizationService : IAuthorizationService
+public class AuthorizationServic : IAuthorizationServic
 {
-    private readonly UserRepository userRepository;
+    private readonly IUserRepository userRepository;
     private readonly IHashService hashService;
     private readonly AbstractValidator<RegistrDTO> validator;
     private readonly IJwtService jwtService;
     private readonly IRefreshTokenService refreshTokenService;
     private readonly ICoockieService coockieService;
-    public AuthorizationService(UserRepository userRepository, IHashService hashService, AbstractValidator<RegistrDTO> validator, IJwtService jwtService, IRefreshTokenService refreshTokenService, ICoockieService coockieService)
+    public AuthorizationServic(IUserRepository userRepository, IHashService hashService, AbstractValidator<RegistrDTO> validator, IJwtService jwtService, IRefreshTokenService refreshTokenService, ICoockieService coockieService)
     {
         this.userRepository = userRepository;
         this.hashService = hashService;
@@ -51,8 +52,36 @@ public class AuthorizationService : IAuthorizationService
         bool flag = coockieService.SetCookie(coockieName, refreshToken, 10);
         if (!flag) return Result<AnswerLoginDTO>.Error(ErrorCode.CoockieError);
         AnswerLoginDTO answer = new AnswerLoginDTO().With(x => x.UserId = user.Id)
-            .With(x => x.Roles = roles).With(x => x.Token = token).With(x => x.CoockieName = coockieName).With(x => x.ExpireHours = expireHours);
+            .With(x => x.Roles = roles).With(x => x.Token = token).With(x => x.CoockieName = coockieName).With(x => x.ExpireMinutes = expireHours);
         return Result<AnswerLoginDTO>.Success(answer);
+    }
+
+    public async Task<Result<bool>> Logout(Guid id)
+    {
+        string coockiename = jwtService.GetCoockieName();
+        string? token = coockieService.GetCookie(coockiename);
+        if (token == null) return Result<bool>.Error(ErrorCode.NotFoundToken);
+        bool flag = await refreshTokenService.DeleteToken(token, id);
+        if (!flag) return Result<bool>.Error(ErrorCode.DeleteTokenError);
+        coockieService.DeleteCookie(coockiename);
+        return Result<bool>.Success(true);
+    }
+
+    public async Task<Result<ChangeTokenDTO>> RefreshToken(Guid id)
+    {
+        string coockiename = jwtService.GetCoockieName();
+        string? token = coockieService.GetCookie(coockiename);
+        if (token == null) return Result<ChangeTokenDTO>.Error(ErrorCode.NotFoundToken);
+        bool flag = await refreshTokenService.IsTokenValid(token, id);
+        if (!flag) return Result<ChangeTokenDTO>.Error(ErrorCode.InvalidRefreshToken);
+        User? userEntity = await userRepository.GetUserById(id);
+        if (userEntity == null) return Result<ChangeTokenDTO>.Error(ErrorCode.UserNotFound);
+        List<string> roles = userEntity.GetRoles();
+        string newRefreshToken = await refreshTokenService.CreateToken(userEntity);
+        string newAccessToken = jwtService.GenerateToken(userEntity, roles);
+        flag = coockieService.SetCookie(coockiename, newRefreshToken, 10);
+        if (!flag) return Result<ChangeTokenDTO>.Error(ErrorCode.CoockieError);
+        return Result<ChangeTokenDTO>.Success(new ChangeTokenDTO{AccessToken = newAccessToken});
     }
 
     public async Task<Result<Guid?>> RegistrUser(RegistrDTO registrDTO)

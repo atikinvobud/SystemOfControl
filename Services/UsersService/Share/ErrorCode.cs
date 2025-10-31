@@ -2,6 +2,10 @@ namespace BackEnd.Share;
 
 public enum ErrorCode
 {
+    InvalidAccessToken,
+    InvalidRefreshToken,
+    NotFoundToken,
+    DeleteTokenError,
     CoockieError,
     WrongPassword,
     EmptyLogin,

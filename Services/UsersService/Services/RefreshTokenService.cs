@@ -6,9 +6,9 @@ namespace BackEnd.Services;
 
 public class RefreshTokenService : IRefreshTokenService
 {
-    private readonly HashService hashService;
+    private readonly IHashService hashService;
     private readonly IRefreshTokenRepository repository;
-    public RefreshTokenService(HashService hashService, IRefreshTokenRepository repository)
+    public RefreshTokenService(IHashService hashService, IRefreshTokenRepository repository)
     {
         this.hashService = hashService;
         this.repository = repository;
@@ -35,9 +35,19 @@ public class RefreshTokenService : IRefreshTokenService
     public async Task<bool> IsTokenValid(string token, Guid id)
     {
         var RefreshToken = await repository.GetToken(id);
-        if( RefreshToken is null) return false;
+        if (RefreshToken is null) return false;
         if (!hashService.Verify(RefreshToken.HashToken, token)) return false;
         if (RefreshToken.ExpiresAt < DateTime.UtcNow) return false;
+        return true;
+    }
+    
+    public async Task<bool> DeleteToken(string token, Guid id)
+    {
+        RefreshToken? refreshToken = await repository.GetToken(id);
+        if (refreshToken is null) return false;
+        if (!hashService.Verify(refreshToken.HashToken, token)) return false;
+        if (refreshToken.ExpiresAt < DateTime.UtcNow) return false;
+        await repository.DeleteToken(refreshToken);
         return true;
     }
 }
