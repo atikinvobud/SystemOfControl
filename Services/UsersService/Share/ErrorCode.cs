@@ -2,6 +2,8 @@ namespace BackEnd.Share;
 
 public enum ErrorCode
 {
+    SavePasswordError,
+    RecoveryCodeError,
     InvalidAccessToken,
     InvalidRefreshToken,
     NotFoundToken,

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 namespace BackEnd.Extensions;
 
@@ -94,9 +95,12 @@ public static class ProgrammcsExtension
         services.AddScoped<IHashService, HashService>();
         services.AddScoped<AbstractValidator<RegistrDTO>, UserValidator>();
         services.AddScoped<IJwtService, JwtService>();
-        services.AddScoped<ITokenAccessor, TokenAccessor>();   
+        services.AddScoped<ITokenAccessor, TokenAccessor>();
         services.AddHttpContextAccessor();
-        
+
+        services.AddSingleton<IConnectionMultiplexer>(_ =>
+            ConnectionMultiplexer.Connect("localhost:6379"));
+    
         services.Configure<JwtSettings>( configuration.GetSection("JwtSettings"));
         return services;
     }

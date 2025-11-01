@@ -8,6 +8,8 @@ public static class ErorrService
 {
     public static string GetMessage(ErrorCode? code) => code switch
     {
+        ErrorCode.SavePasswordError => "проблема с сохранением пароля",
+        ErrorCode.RecoveryCodeError => "Проблема с кодом сохранения",
         ErrorCode.InvalidRefreshToken => "некорректный refresh токен",
         ErrorCode.InvalidAccessToken => "ошибка с access токеном",
         ErrorCode.DeleteTokenError => "Не удалось удалить токен",
@@ -44,7 +46,8 @@ public static class ErorrService
         or ErrorCode.LoginError or ErrorCode.InvalidAccessToken 
         or ErrorCode.InvalidRefreshToken=> HttpStatusCode.Unauthorized, // 401
         ErrorCode.CoockieError or ErrorCode.UserCreationError
-        or ErrorCode.DeleteTokenError or ErrorCode.NotFoundToken => HttpStatusCode.InternalServerError, // 500
+        or ErrorCode.DeleteTokenError or ErrorCode.NotFoundToken
+        or ErrorCode.RecoveryCodeError or ErrorCode.SavePasswordError=> HttpStatusCode.InternalServerError, // 500
         _ => HttpStatusCode.BadRequest                            // 400
     };
 
