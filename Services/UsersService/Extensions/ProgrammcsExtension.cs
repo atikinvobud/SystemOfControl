@@ -88,7 +88,8 @@ public static class ProgrammcsExtension
 
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IAuthorizationServic, AuthorizationServic>();
         services.AddScoped<ICoockieService, CoockieService>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();

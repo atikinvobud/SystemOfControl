@@ -8,6 +8,7 @@ public static class ErorrService
 {
     public static string GetMessage(ErrorCode? code) => code switch
     {
+        ErrorCode.RoleNotFound => "Не найдена роль",
         ErrorCode.SavePasswordError => "проблема с сохранением пароля",
         ErrorCode.RecoveryCodeError => "Проблема с кодом сохранения",
         ErrorCode.InvalidRefreshToken => "некорректный refresh токен",
@@ -36,7 +37,7 @@ public static class ErorrService
     public static HttpStatusCode GetStatusCode(ErrorCode? code) => code switch
     {
         ErrorCode.RepeatLogin => HttpStatusCode.Conflict,       // 409
-        ErrorCode.UserNotFound => HttpStatusCode.NotFound,       // 404
+        ErrorCode.UserNotFound or ErrorCode.RoleNotFound => HttpStatusCode.NotFound,       // 404
         ErrorCode.WrongPassword or ErrorCode.InvalidPassword 
         or ErrorCode.SurnameError or ErrorCode.SurnameLength
         or ErrorCode.EmptySurname or ErrorCode.NameError 
