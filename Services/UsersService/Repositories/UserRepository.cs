@@ -59,4 +59,18 @@ public class UserRepository : IUserRepository
         user.HashPassword = newPassword;
         return context.SaveChangesAsync();
     }
+
+    public async Task<Guid> AppointRole(UserRole userRole)
+    {
+        context.userRoleEntities.Add(userRole);
+        await context.SaveChangesAsync();
+        return userRole.Id;
+    }
+
+    public Task<List<User>> GelAllWithPagination(string? role, int page, int pageSize)
+    {
+        var query = context.userEntities.Include(u => u.UserInfoEntity).Include(u => u.UserRolesEntities).ThenInclude(ur => ur.RoleEntity).AsQueryable();
+        if (role is not null) query = query.Where(r => r.UserRolesEntities.Any(ur => ur.RoleEntity!.Name == role));
+        return query.OrderBy(u => u.Id).Skip((page -1)*pageSize).Take(pageSize).ToListAsync();
+    }
 }

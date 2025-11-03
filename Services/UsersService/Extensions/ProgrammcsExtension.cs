@@ -97,6 +97,8 @@ public static class ProgrammcsExtension
         services.AddScoped<AbstractValidator<RegistrDTO>, UserValidator>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<ITokenAccessor, TokenAccessor>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IUserInfoRepository, UserInfoRepository>();
         services.AddHttpContextAccessor();
 
         services.AddSingleton<IConnectionMultiplexer>(_ =>

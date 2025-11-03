@@ -2,6 +2,7 @@ namespace BackEnd.Share;
 
 public enum ErrorCode
 {
+    UserInfoNotFound,
     RoleNotFound,
     SavePasswordError,
     RecoveryCodeError,
