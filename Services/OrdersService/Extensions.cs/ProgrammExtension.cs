@@ -83,8 +83,6 @@ public static class ProgrammcsExtension
 
         services.AddScoped<IStatusRepository, StatusRepository>();
         services.AddScoped<IStatusService, StatusService>();
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IProductService, ProductService>();
         return services;
     }
 

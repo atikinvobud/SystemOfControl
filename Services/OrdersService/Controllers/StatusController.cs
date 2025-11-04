@@ -4,7 +4,7 @@ using BackEnd.Share;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BackEnd.Controllers;
+namespace Backend.Controllers;
 
 [ApiController]
 [Route("status")]
