@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json;
 using BackEnd.Models;
+using BackEnd.Repositories;
+using BackEnd.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -78,6 +80,9 @@ public static class ProgrammcsExtension
                     ValidateLifetime = true,
                 };
             });
+
+        services.AddScoped<IStatusRepository, StatusRepository>();
+        services.AddScoped<IStatusService, StatusService>();
         return services;
     }
 
