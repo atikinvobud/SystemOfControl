@@ -8,11 +8,13 @@ public static class ErorrService
 {
     public static string GetMessage(ErrorCode? code) => code switch
     {
+        ErrorCode.StatusNotFound => "Статус не найден",
         ErrorCode.InvalidAccessToken => "не валидный access токен",
         _ => "Неизвестная ошибка"
     };
     public static HttpStatusCode GetStatusCode(ErrorCode? code) => code switch
     {
+        ErrorCode.StatusNotFound => HttpStatusCode.NotFound, // 404
         ErrorCode.InvalidAccessToken => HttpStatusCode.Unauthorized, // 401
         _ => HttpStatusCode.BadRequest                            // 400
     };
