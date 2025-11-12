@@ -1,4 +1,5 @@
 using BackEnd.DTOs;
+using BackEnd.Entities;
 using BackEnd.Share;
 
 namespace BackEnd.Services;
@@ -10,4 +11,5 @@ public interface IStatusService
     Task<Result<Guid>> CreateStatus(PostStatus postStatus);
     Task<Result<bool>> UpdateStatus(PutStatus putStatus);
     Task<Result<bool>> DeleteStatus(DeleteStatus deleteStatus);
+    Task<Status?> CheckStatus(string status);
 }

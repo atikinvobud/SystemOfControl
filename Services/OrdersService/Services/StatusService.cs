@@ -13,7 +13,17 @@ public class StatusService : IStatusService
     {
         this.statusRepository = statusRepository;
     }
-    
+
+    public async Task<Status?> CheckStatus(string status)
+    {
+        List<Status> statuses = await statusRepository.GetAllStatuses();
+        foreach (Status stat in statuses)
+        {
+            if (stat.Name.ToLower() == status.ToLower()) return stat;
+        }
+        return null;
+    }
+
     public async  Task<Result<Guid>> CreateStatus(PostStatus postStatus)
     {
         Status status = postStatus.ToEntity();

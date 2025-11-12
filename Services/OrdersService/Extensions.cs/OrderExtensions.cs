@@ -1,5 +1,6 @@
 using BackEnd.DTOs;
 using BackEnd.Entities;
+using BackEnd.Share;
 
 namespace BackEnd.Extensions;
 
@@ -23,15 +24,25 @@ public static class OrderExtensions
         };
     }
 
-    public static Order ToEntity(this PostOrder postOrder, Guid userId)
+    public static Order ToEntity( Guid userId)
     {
         return new Order()
         {
             Id = Guid.NewGuid(),
-            StatusId = postOrder.StatusId,
+            StatusId = OrderCodeService.GetMessage(OrderStatuses.Created),
             UserId = userId,
             DateOfCreation = DateTime.UtcNow,
             DateOfUpdate = DateTime.UtcNow,
+        };
+    }
+
+    public static OrderProduct ProductOrder(this PostOrderProduct postOrderProduct)
+    {
+        return new OrderProduct()
+        {
+            ProductId = postOrderProduct.ProductId,
+            OrderId = postOrderProduct.OrderId,
+            Amount = postOrderProduct.Amount
         };
     }
 }

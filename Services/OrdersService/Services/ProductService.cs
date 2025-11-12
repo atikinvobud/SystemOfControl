@@ -13,6 +13,14 @@ public class ProductService : IProductService
     {
         this.productRepository = productRepository;
     }
+
+    public async Task<bool> CheckProduct(Guid productId)
+    {
+        Product? product = await productRepository.GetProductById(productId);
+        if (product is null) return false;
+        return true;
+    }
+
     public async Task<Result<Guid>> CreateProduct(PostProduct postProduct)
     {
         Product product = postProduct.ToEntity();
@@ -54,4 +62,5 @@ public class ProductService : IProductService
         await productRepository.UpdateProduct(product);
         return Result<bool>.Success(true);
     }
+    
 }

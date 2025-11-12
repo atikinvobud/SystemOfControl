@@ -46,4 +46,10 @@ public class OrderRepository : IOrderRepository
         await context.SaveChangesAsync();
         return orderProduct.Id;
     }
+
+    public Task UpdateStatus(Order order, Guid statusId)
+    {
+        order.StatusId = statusId;
+        return context.SaveChangesAsync();
+    }
 }

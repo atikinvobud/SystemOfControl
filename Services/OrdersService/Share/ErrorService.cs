@@ -8,6 +8,7 @@ public static class ErorrService
 {
     public static string GetMessage(ErrorCode? code) => code switch
     {
+        ErrorCode.ErorUser => "Не правильный пользователь для заказа",
         ErrorCode.productNotFound => "Продукт не найден",
         ErrorCode.StatusNotFound => "Статус не найден",
         ErrorCode.OrderNotFound => "Заказ не найден",
@@ -16,6 +17,7 @@ public static class ErorrService
     };
     public static HttpStatusCode GetStatusCode(ErrorCode? code) => code switch
     {
+        ErrorCode.ErorUser => HttpStatusCode.Forbidden, //403
         ErrorCode.productNotFound or ErrorCode.StatusNotFound
         or ErrorCode.OrderNotFound => HttpStatusCode.NotFound, // 404
         ErrorCode.InvalidAccessToken => HttpStatusCode.Unauthorized, // 401

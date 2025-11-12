@@ -9,4 +9,5 @@ public interface IOrderRepository
     Task<List<Order>> GetWithPagination(Guid UserId, Guid? StatusId, int page, int pageSize);
     Task<Guid> AddProduct(OrderProduct orderProduct);
     Task<Guid> CreateOrder(Order order);
+    Task UpdateStatus(Order order, Guid statusId);
 }

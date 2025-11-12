@@ -11,4 +11,5 @@ public interface IProductService
     Task<Result<Guid>> CreateProduct(PostProduct postProduct);
     Task<Result<bool>> UpdateProduct(PutProduct putProduct);
     Task<Result<bool>> DeleteProduct(DeleteProduct deleteProduct);
+    Task<bool> CheckProduct(Guid productId);
 }

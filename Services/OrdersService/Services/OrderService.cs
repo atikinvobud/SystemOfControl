@@ -9,19 +9,41 @@ namespace BackEnd.Services;
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository orderRepository;
-    public OrderService(IOrderRepository orderRepository)
+    private readonly IStatusService statusService;
+    private readonly IProductService productService;
+    public OrderService(IOrderRepository orderRepository, IStatusService statusService, IProductService productService)
     {
         this.orderRepository = orderRepository;
+        this.statusService = statusService;
+        this.productService = productService;
     }
 
-    public Task<Result<Guid>> AddProduct(PostOrderProduct postOrderProduct)
+    public async Task<Result<Guid>> AddProduct(PostOrderProduct postOrderProduct, Guid userId)
     {
-        throw new NotImplementedException();
+        OrderProduct entity = postOrderProduct.ProductOrder();
+        Order? order = await orderRepository.GetById(entity.OrderId);
+        if (order is null) return Result<Guid>.Error(ErrorCode.OrderNotFound);
+        if (order.UserId != userId) return Result<Guid>.Error(ErrorCode.ErorUser);
+        bool flag = await productService.CheckProduct(entity.ProductId);
+        if (!flag) return Result<Guid>.Error(ErrorCode.productNotFound);
+        Guid id = await orderRepository.AddProduct(entity);
+
+        return Result<Guid>.Success(id);
     }
 
-    public async Task<Result<Guid>> Craeteorder(Guid Id, PostOrder postOrder)
+    public async Task<Result<bool>> ChangeStatus(Guid orderId, string newStatus)
     {
-        Order order = postOrder.ToEntity(Id);
+        Order? order = await orderRepository.GetById(orderId);
+        if (order == null) return Result<bool>.Error(ErrorCode.OrderNotFound);
+        Status? stat = await statusService.CheckStatus(newStatus);
+        if (stat == null) return Result<bool>.Error(ErrorCode.StatusNotFound);
+        await orderRepository.UpdateStatus(order, stat.Id);
+        return Result<bool>.Success(true);
+    }
+
+    public async Task<Result<Guid>> Craeteorder(Guid Id)
+    {
+        Order order = OrderExtensions.ToEntity(Id);
         await orderRepository.CreateOrder(order);
         return Result<Guid>.Success(order.Id);
     }
