@@ -83,6 +83,12 @@ public static class ProgrammcsExtension
 
         services.AddScoped<IStatusRepository, StatusRepository>();
         services.AddScoped<IStatusService, StatusService>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddHttpContextAccessor();
+        services.AddScoped<ITokenAccessor, TokenAccessor>();
         return services;
     }
 
