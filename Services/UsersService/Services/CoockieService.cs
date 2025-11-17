@@ -18,7 +18,7 @@ public class CoockieService : ICoockieService
         response.Cookies.Append(name, token, new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
+            Secure = false,
             SameSite = SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddDays(days)
         });

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersService", "Services\Us
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersService", "Services\OrdersService\OrdersService.csproj", "{1E802235-D4EC-47C0-99C8-71B193EE6B22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "Services\ApiGateway\ApiGateway.csproj", "{BFD48468-D72A-4B80-A53D-D020161A1B1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,18 @@ Global
 		{1E802235-D4EC-47C0-99C8-71B193EE6B22}.Release|x64.Build.0 = Release|Any CPU
 		{1E802235-D4EC-47C0-99C8-71B193EE6B22}.Release|x86.ActiveCfg = Release|Any CPU
 		{1E802235-D4EC-47C0-99C8-71B193EE6B22}.Release|x86.Build.0 = Release|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Debug|x64.Build.0 = Debug|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Debug|x86.Build.0 = Debug|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Release|x64.ActiveCfg = Release|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Release|x64.Build.0 = Release|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Release|x86.ActiveCfg = Release|Any CPU
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +64,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DF437584-831E-4851-926D-6512FA041BCD} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
 		{1E802235-D4EC-47C0-99C8-71B193EE6B22} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
+		{BFD48468-D72A-4B80-A53D-D020161A1B1A} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
 	EndGlobalSection
 EndGlobal
