@@ -29,9 +29,14 @@ public static class ProgrammcsExtension
             });
 
         // подключение к postgres
-        var connectionString = Environment.GetEnvironmentVariable("DatabaseConnection");
-        services.AddDbContext<Context>(options => options.UseNpgsql(connectionString));
+        var dbHost = configuration["DB_HOST"];
+        var dbPort = configuration["DB_PORT"];
+        var dbName = configuration["DB_NAME"];
+        var dbUser = configuration["DB_USER"];
+        var dbPassword = configuration["DB_PASSWORD"];
 
+        var connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}";
+        services.AddDbContext<Context>(options => options.UseNpgsql(connectionString));
         // подключение Swagger
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
@@ -101,8 +106,10 @@ public static class ProgrammcsExtension
         services.AddScoped<IUserInfoRepository, UserInfoRepository>();
         services.AddHttpContextAccessor();
 
+        var redisHost = configuration["REDIS_HOST"] ;
+        var redisPort = configuration["REDIS_PORT"];
         services.AddSingleton<IConnectionMultiplexer>(_ =>
-            ConnectionMultiplexer.Connect("localhost:6379"));
+            ConnectionMultiplexer.Connect($"{redisHost}:{redisPort}"));
     
         services.Configure<JwtSettings>( configuration.GetSection("JwtSettings"));
         return services;

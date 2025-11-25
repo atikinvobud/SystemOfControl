@@ -1,0 +1,81 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: SystemOfControl
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sUPER123
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+
+  users:
+    build: ./Services/UsersService
+    env_file:
+      - ./Services/UsersService/.env
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+    expose:
+      - "5000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+
+  orders:
+    build: ./Services/OrdersService
+    env_file:
+      - ./Services/OrdersService/.env
+    environment:
+      DB_HOST: db
+    expose:
+      - "5142"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+
+  yarp:
+    build: ./Services/ApiGateway
+    env_file:
+      - ./Services/ApiGateway/.env
+    environment:
+      USERS_HOST: users      
+      ORDERS_HOST: orders    
+    ports:
+      - "5206:5206"
+    depends_on:
+      - users
+      - orders
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

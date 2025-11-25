@@ -1,5 +1,6 @@
 using BackEnd.Services;
 using Microsoft.AspNetCore.Http;
+namespace BackEnd.Services;
 
 public class CoockieService : ICoockieService
 {
@@ -18,7 +19,7 @@ public class CoockieService : ICoockieService
         response.Cookies.Append(name, token, new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
+            Secure = false,
             SameSite = SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddDays(days)
         });

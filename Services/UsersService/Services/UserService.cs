@@ -10,16 +10,18 @@ public class UserService : IUserService
 {
     private readonly IUserRepository userRepository;
     private readonly IUserInfoRepository userInfoRepository;
-    public UserService(IUserRepository userRepository, IUserInfoRepository userInfoRepository)
+    private readonly IRoleRepository roleRepository;
+    public UserService(IUserRepository userRepository, IUserInfoRepository userInfoRepository, IRoleRepository roleRepository)
     {
         this.userRepository = userRepository;
         this.userInfoRepository = userInfoRepository;
+        this.roleRepository = roleRepository;
     }
 
     public async Task<Result<GetUser>> GetUser(Guid Id)
     {
         User? user = await userRepository.GetUserById(Id);
-        if (user is null) Result<GetUser>.Error(ErrorCode.UserNotFound);
+        if (user is null) return Result<GetUser>.Error(ErrorCode.UserNotFound);
         return Result<GetUser>.Success(user!.ToDTO());
     }
 
@@ -33,6 +35,10 @@ public class UserService : IUserService
     }
     public async Task<Result<Guid>> AppointRole(PostUserRole postUserRole)
     {
+        User? user = await userRepository.GetUserById(postUserRole.UserId);
+        if(user is null) return Result<Guid>.Error(ErrorCode.UserNotFound);
+        Role? role = await roleRepository.GetEntityById(postUserRole.RoleId);
+        if (role is null) return Result<Guid>.Error(ErrorCode.RoleNotFound);
         UserRole userRole = postUserRole.ToEntity();
         Guid Id = await userRepository.AppointRole(userRole);
         return Result<Guid>.Success(Id);
