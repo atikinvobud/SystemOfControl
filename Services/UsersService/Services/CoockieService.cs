@@ -1,5 +1,6 @@
 using BackEnd.Services;
 using Microsoft.AspNetCore.Http;
+namespace BackEnd.Services;
 
 public class CoockieService : ICoockieService
 {
