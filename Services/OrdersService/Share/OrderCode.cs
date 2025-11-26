@@ -5,5 +5,6 @@ public enum OrderStatuses
     InWork,
     Waiting,
     Created,
-    WaitingApprove
+    WaitingApprove,
+    Cancelled
 }
